@@ -1,5 +1,7 @@
 package org.example.homework;
 
+import java.sql.SQLOutput;
+
 public class Homework1 {
     public static void main(String[] args) {
         ex1();
@@ -17,6 +19,15 @@ public class Homework1 {
         //3. Если содержит "ова " то печатаем на экран: Уважаемая {name}
         // Если содержит "ов " то печатаем на экран: Уважаемый {name}
         // В иных случаях печатаем на экран: Неизвестное лицо {name}
+        name = name.trim();
+        name = name.toUpperCase();
+        if (name.contains("ОВА")) {
+            System.out.println("Уважаемая " + name);
+        } else if (name.contains("ОВ")) {
+            System.out.println("Уважаемый " + name);
+        } else {
+            System.out.println("Неизвестное лицо " + name);
+        }
     }
 
     public static void ex2() {
@@ -37,10 +48,10 @@ public class Homework1 {
         // когда топлива не меньше 10 литров, двигатель работает, колеса все работают, нет ошибок
         //В ином случае, машина не должна запускаться
         if (
-                fuel < 10
-                ||  (!isWheelWork1 || isWheelWork2 || isWheelWork3 || isWheelWork4)
-                && hasErrors
-                || isEngineWork
+                fuel >= 10
+                &&  (isWheelWork1 && isWheelWork2 && isWheelWork3 && isWheelWork4)
+                && !hasErrors
+                && isEngineWork
         ) {
             System.out.println("Машина работает");
         } else {
@@ -53,6 +64,10 @@ public class Homework1 {
         //Заменить в строке все 'this is' на 'those are', получить индекс (число) второй буквы 'o' в строке
         //Распечатать полученный индекс
         String simply = "this is simply. This is my favorite song.";
+        simply = simply.replaceAll("this is", "those are");
+        simply = simply.replaceAll("This is", "Those are");
+        int index = simply.indexOf("o", simply.indexOf("o") + 1);
+        System.out.println("Индекс второй буквы 'о' в строке: " + index);
     }
 
     public static void ex4() {
@@ -92,5 +107,45 @@ public class Homework1 {
         //Колбасы 2000кг
         //Ветчины 8511кг
         //Шейки 6988кг
+        profitCalculator(2000, 8511, 6988);
+    }
+
+    private static void profitCalculator(int sausage, int ham, int porkNeck) {
+        int incomeSausage = 800 * sausage;
+        int incomeHam = 350 * ham;
+        int incomePorkNeck = 500 * porkNeck;
+        int incomeCompany = incomeSausage + incomeHam + incomePorkNeck;
+        int costPriceSausage;
+        int costPriceHam;
+        int costPricePorkNeck;
+        if (sausage < 1000) {
+            costPriceSausage = sausage * 412;
+        } else if (sausage < 2000) {
+            costPriceSausage = sausage * 408;
+        } else {
+            costPriceSausage = sausage * 404;
+        }
+        costPriceHam = ham * 275;
+        if (porkNeck < 500) {
+            costPricePorkNeck = porkNeck * 311;
+        } else {
+            costPricePorkNeck = porkNeck * 299;
+        }
+        int expensesCompany = costPriceSausage + costPriceHam + costPricePorkNeck + 1_000_000;
+        int profitCompany = incomeCompany - expensesCompany;
+        double netProfit;
+        if (profitCompany >= 1_000_000) {
+            netProfit = 1_000_000 * 0.08;
+            if (profitCompany > 2_000_000) {
+                netProfit = netProfit + 1_000_000 * 0.1;
+                netProfit = netProfit + (profitCompany - 2_000_000) * 0.13;
+            } else {
+                netProfit = netProfit + (profitCompany - 1_000_000) * 0.1;
+
+            }
+        } else {
+            netProfit = profitCompany * 0.13;
+        }
+        System.out.println("Прибыль компании после налогов: " + (profitCompany - netProfit));
     }
 }
